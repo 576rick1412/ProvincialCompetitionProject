@@ -6,10 +6,7 @@ using TMPro;
 
 public class IngameUI : MonoBehaviour
 {
-    public GameObject player;
-
-    public float setHP;
-    public float setOil;
+    GameObject player;
 
     public Image HPBar;
     public Image oilBar;
@@ -20,9 +17,6 @@ public class IngameUI : MonoBehaviour
     void Awake()
     {
         player = GameObject.Find("Player");
-
-        setHP = player.GetComponent<Player>()._HP;
-        setOil = player.GetComponent<Player>().oil;
     }
 
     void Start()
@@ -37,8 +31,8 @@ public class IngameUI : MonoBehaviour
 
     void UI_Update()
     {
-        HPBar.fillAmount = player.GetComponent<Player>()._HP / setHP;
-        oilBar.fillAmount = player.GetComponent<Player>().oil / setOil;
+        HPBar.fillAmount = player.GetComponent<Player>()._HP / player.GetComponent<Player>().setHP;
+        oilBar.fillAmount = player.GetComponent<Player>().oil / player.GetComponent<Player>().setOil;
 
         if(player.GetComponent<Player>().attack.nowAMMO == 0)
         {

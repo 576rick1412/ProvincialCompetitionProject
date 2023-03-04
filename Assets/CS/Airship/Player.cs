@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Player : Airship
 {
+    public float setHP;         // HP 최대치 저장
+
     public float oil;           // 연료
+    public float setOil;        // 연료 최대치 저장
     public float oilMinus;      // 연료 연소 속도
+    public bool isRefuel = false;      // 공중급유
 
     public Vector2 moveRestri;  // 이동제한
                                 // 3.8 , 6
@@ -15,6 +19,8 @@ public class Player : Airship
     public override void Awake()
     {
         base.Awake();
+
+        setHP = HP; setOil = oil;
 
         attack.isBulletCoolTime = true;
         attack.nowAMMO = attack.maxAMMO;
@@ -29,6 +35,8 @@ public class Player : Airship
     {
         if (oil <= 0) Die();
         else oil -= oilMinus * Time.deltaTime;
+        
+        if (oil < setOil && isRefuel) oil += oilMinus * 10 * Time.deltaTime;
 
         PlayerControl();
     }
@@ -43,7 +51,7 @@ public class Player : Airship
             BordarCheck(nextPos);   // 이동도 들어있음
         }   // 이동 입력
 
-        if(Input.GetKeyDown(KeyCode.R) && attack.isBulletCoolTime)
+        if(Input.GetKey(KeyCode.R) && attack.isBulletCoolTime)
         {
             if (attack.nowAMMO >= attack.maxAMMO) return;   // 탄약 최대일 시 장전 불가
 
@@ -108,6 +116,19 @@ public class Player : Airship
     {
         //base.Die();
     }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Refuel"))
+            isRefuel = true;
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Refuel"))
+            isRefuel = false;
+    }
+
 
     [System.Serializable]
     public struct Attack
