@@ -24,9 +24,9 @@ public class MoveBG : MonoBehaviour
     {
         transform.position += new Vector3(0, speed * -1, 0) * Time.deltaTime;
 
-        if (transform.position.y <= endPos)
+        if (isCargo)
         {
-            if (isCargo)
+            if (transform.position.y >= endPos)
             {
                 float h = Random.Range(-2.5f, 2.5f);
                 speed = Random.Range(-1f, -3.5f);
@@ -34,9 +34,13 @@ public class MoveBG : MonoBehaviour
                 transform.localScale = new Vector3(scale, scale, scale);
 
                 transform.position += new Vector3(h, startPos * 2, 0);
-            }   // 비행체 오브젝트 체크
+            }
+        }   // 비행체 오브젝트 체크
 
-            else transform.position += new Vector3(0, startPos * 2, 0);
+        else
+        {
+            if (transform.position.y <= endPos)
+                transform.position += new Vector3(0, startPos * 2, 0);
         }
     }
 }
