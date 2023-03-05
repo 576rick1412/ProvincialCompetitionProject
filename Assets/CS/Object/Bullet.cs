@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public bool isPlayer;
-    public float Damage;
+    float Damage;
 
     string targetTag;
     void Start()
@@ -26,8 +26,8 @@ public class Bullet : MonoBehaviour
             collision.gameObject.GetComponent<Airship>()._HP = Damage;
             Destroy(gameObject);
         }
-
-        if(collision.gameObject.CompareTag("Border"))
+            
+        if (collision.gameObject.CompareTag("Border"))
             Destroy(gameObject);
     }
 }

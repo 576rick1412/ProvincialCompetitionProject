@@ -33,7 +33,8 @@ public class MoveBG : MonoBehaviour
                 float scale = Random.Range(0.2f, 0.75f);
                 transform.localScale = new Vector3(scale, scale, scale);
 
-                transform.position += new Vector3(h, startPos * 2, 0);
+                transform.position += new Vector3(0, startPos * 2, 0);
+                transform.position  = new Vector3(h, transform.position.y, transform.position.z); 
             }
         }   // 비행체 오브젝트 체크
 

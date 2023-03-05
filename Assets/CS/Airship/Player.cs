@@ -4,23 +4,42 @@ using UnityEngine;
 
 public class Player : Airship
 {
-    public float setHP;         // HP 최대치 저장
+    [Header("체력, 연료 최대치 저장")]
+    public float setHP;             // HP 최대치 저장
+    public float setOil;            // 연료 최대치 저장
 
-    public float oil;           // 연료
-    public float setOil;        // 연료 최대치 저장
-    public float oilMinus;      // 연료 연소 속도
-    public bool isRefuel = false;      // 공중급유
+    public float _oil
+    {
+        get
+        {
+            return oil;
+        }
 
-    public Vector2 moveRestri;  // 이동제한
-                                // 3.8 , 6
+        set
+        {
+            if (oil <= 0) { Die();  return; }
 
+            if (oil + value < setOil)
+                oil += value;
+        }
+    }
+
+    [Header("연료 설정")]
+    public float oil;               // 연료
+    float oilMinus = 1f;            // 연료 연소 속도
+    bool isRefuel = false;          // 공중급유
+
+    [Header("보더 제한")]
+    public Vector2 moveRestri;      // 이동제한
+                                    // 3.8 , 6
+    [Header("공격 설정")]
     public Attack attack;
 
     public override void Awake()
     {
         base.Awake();
 
-        setHP = HP; setOil = oil;
+        HP = setHP; oil = setOil;
 
         attack.isBulletCoolTime = true;
         attack.nowAMMO = attack.maxAMMO;
@@ -33,10 +52,8 @@ public class Player : Airship
 
     public override void Update()
     {
-        if (oil <= 0) Die();
-        else oil -= oilMinus * Time.deltaTime;
-        
-        if (oil < setOil && isRefuel) oil += oilMinus * 10 * Time.deltaTime;
+        if (isRefuel) _oil = oilMinus * 10 * Time.deltaTime;
+        else _oil = -oilMinus * Time.deltaTime;
 
         PlayerControl();
     }
@@ -72,6 +89,7 @@ public class Player : Airship
             nextPos.y = 0f;
 
         Move(nextPos);
+        anime.SetInteger("Move", (int)nextPos.x);
     }
 
 
@@ -115,6 +133,7 @@ public class Player : Airship
     public override void Die()
     {
         //base.Die();
+        Debug.Log("연료 부족!! 게임오버");
     }
 
 

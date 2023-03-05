@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Airship : MonoBehaviour
 {
-    public float _HP 
+    public virtual float _HP 
     {
         get 
         { 
@@ -13,7 +13,11 @@ public class Airship : MonoBehaviour
 
         set 
         {
-            if(HP - value <= 0) Die();
+            if (HP - value <= 0)
+            {
+                HP = 0;
+                Die();
+            }
 
             else
             {
@@ -24,10 +28,12 @@ public class Airship : MonoBehaviour
     }
 
     public float HP;
-    public float speed;
+    public float speed; 
+    public uint point;      // 처치 시 주는 포인트
 
-    Animator anime;
-
+    [HideInInspector]
+    public Animator anime;
+    public GameObject boomObject;
     public virtual void Awake()
     {
         anime = GetComponent<Animator>();
@@ -46,13 +52,15 @@ public class Airship : MonoBehaviour
     public void Move(Vector2 pos)
     {
         transform.position += new Vector3(pos.x, pos.y, 0) * speed * Time.deltaTime;
-        anime.SetInteger("Move", (int)pos.x);
     }
 
     public virtual void Hit(float Damage) { _HP = Damage; }
 
     public virtual void Die()
     {
-        anime.SetTrigger("Die");
+        GameManager.GM.score += point;
+
+        Instantiate(boomObject, transform.position, transform.rotation);
+        Destroy(gameObject);
     }   // 파괴 시 실행
 }

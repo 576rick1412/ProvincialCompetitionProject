@@ -7,11 +7,20 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager GM;
 
+    [Header("데미지")]
     public int palyerDamage;
     public int enemyDamage;
 
+    [Header("카고 체력")]
+    public float setCargoHP;
+    public float cargoHP;
+
+    [Header("점수")]
+    public uint score;   // 현재 게임 점수
+
     string filePath;    // 저장 경로
     public MainDB data;
+
     void Awake()
     {
         GM = this;
@@ -20,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
+        cargoHP = setCargoHP;
     }
 
     void Update()
@@ -47,6 +56,8 @@ public class GameManager : MonoBehaviour
 
 
     }
+
+    public string CommaText(uint Num) { return string.Format("{0:#,###}", Num); }
 
     [System.Serializable]
     public class MainDB
