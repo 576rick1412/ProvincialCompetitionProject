@@ -22,6 +22,9 @@ public class MoveBG : MonoBehaviour
 
     void Update()
     {
+        // 게임오버시 전체 중단
+        if (GameManager.GM.isGameOver) return;
+
         transform.position += new Vector3(0, speed * -1, 0) * Time.deltaTime;
 
         if (isCargo)

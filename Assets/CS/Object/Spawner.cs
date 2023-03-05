@@ -20,16 +20,15 @@ public class Spawner : MonoBehaviour
 
     IEnumerator RandomSpawn()
     {
-        while (true)
+        // 게임오버가 거짓일 때만 동작
+        while (!GameManager.GM.isGameOver)
         {
-
-
             float h = Random.Range(-2f, 2f);
             Vector2 pos = new Vector2(h, transform.position.y);
             Instantiate(spawnObjects[0], pos, transform.rotation);
 
             yield return new WaitForSeconds(spawnTime);
         }
-        //yield return null;
+        yield return null;
     }
 }

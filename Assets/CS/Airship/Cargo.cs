@@ -39,6 +39,6 @@ public class Cargo : Airship
 
     public override void Update()
     {
-
+        
     }
 }

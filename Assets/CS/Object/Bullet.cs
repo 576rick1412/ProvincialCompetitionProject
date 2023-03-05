@@ -16,11 +16,18 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
+        // 총알제거가 켜지면 모든 총알 제거
+        if (GameManager.GM.isBulletDestroy) Destroy(gameObject);
 
+        // 게임오버시 전체 삭제
+        if (GameManager.GM.isGameOver) Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 게임오버시 전체 중단
+        if (GameManager.GM.isGameOver) return;
+
         if (collision.gameObject.CompareTag(targetTag))
         {
             collision.gameObject.GetComponent<Airship>()._HP = Damage;

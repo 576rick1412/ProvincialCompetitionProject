@@ -3336,6 +3336,10 @@ MonoBehaviour:
   setCargoHP: 1000
   cargoHP: 0
   score: 0
+  mainCanvas: {fileID: 1071075223}
+  overObject: {fileID: 8852127221919828317, guid: 66a3548fa27ecf245b003a898b2a80df, type: 3}
+  isGameOver: 0
+  isBulletDestroy: 0
 --- !u!1 &1446507317
 GameObject:
   m_ObjectHideFlags: 0

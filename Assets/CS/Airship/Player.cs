@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Player : Airship
 {
-    [Header("체력, 연료 최대치 저장")]
+    [HideInInspector]
     public float setHP;             // HP 최대치 저장
+    [HideInInspector]
     public float setOil;            // 연료 최대치 저장
 
     public float _oil
@@ -52,10 +53,15 @@ public class Player : Airship
 
     public override void Update()
     {
+        // 게임오버시 전체 중단
+        if (GameManager.GM.isGameOver) return;
+
         if (isRefuel) _oil = oilMinus * 10 * Time.deltaTime;
         else _oil = -oilMinus * Time.deltaTime;
 
         PlayerControl();
+
+        GameOverCheck();
     }
 
     void PlayerControl()
@@ -92,6 +98,11 @@ public class Player : Airship
         anime.SetInteger("Move", (int)nextPos.x);
     }
 
+    void GameOverCheck()
+    {
+        if (HP <= 0)  GameManager.GM.GameOver("Player Destroy\nNo HP");
+        if (oil <= 0) GameManager.GM.GameOver("Player Destroy\nNo Oil");
+    }
 
     void ShotBullet()
     {
@@ -111,7 +122,8 @@ public class Player : Airship
 
             yield return new WaitForSeconds(attack.bulletCoolTime);
         }
-        else
+
+        if (attack.nowAMMO <= 0)
         {
             attack.reloadBar = attack.reloadTime;
             int times = 40;
@@ -120,7 +132,7 @@ public class Player : Airship
                 attack.reloadBar -= (attack.reloadTime / times);
                 yield return new WaitForSeconds(attack.reloadTime / times);
             }
-            
+
             attack.nowAMMO = attack.maxAMMO;
             // 재장전
         }

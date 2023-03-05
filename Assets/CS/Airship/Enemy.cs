@@ -21,6 +21,9 @@ public class Enemy : Airship
 
     public override void Update()
     {
+        // 게임오버시 전체 중단
+        if (GameManager.GM.isGameOver) return;
+
         if (HP != tmpeHP) HPbar.SetActive(true);
         else tmpeHP = HP;
 
