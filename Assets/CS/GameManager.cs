@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public uint desLargeAircraft;   // 소형기 파괴
 
     [Header("게임오버")]
-    Transform mainCanvas;    // 게임오버가 들어갈 캔버스
+    Transform GMCanvas;             // 게임오버가 들어갈 캔버스
     public GameObject overObject;   // 게임오버를 알려줄 오브젝트
     
     [Header("게임 관리용 변수")]
@@ -38,8 +38,11 @@ public class GameManager : MonoBehaviour
     {
         GM = this;
         filePath = Application.persistentDataPath + "/MainDB.txt";
+        Debug.Log(filePath);
 
-        mainCanvas = GameObject.Find("MainCanvas").transform;
+        LoadData();
+
+        GMCanvas = GameObject.Find("GMCanvas").transform;
     }
 
     void Start()
@@ -49,34 +52,23 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // 기능확인용
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("기능확인용 입력");
+            SavaData();
+        }
+
         // 수송선 체력 없을 시 게임오버
         if (cargoHP <= 0) GameOver("Cargo Destroy\nmission failed");
-    }
-
-    public void SavaData()
-    {
-        var save = JsonUtility.ToJson(data);
-        File.WriteAllText(filePath, save);
-    }   // Json 저장
-    public void LoadData()
-    {
-        if (!File.Exists(filePath)) { ResetMainDB(); return; }
-
-        var load = File.ReadAllText(filePath);
-        data = JsonUtility.FromJson<MainDB>(load);
-    }   // Json 로딩
-
-    void ResetMainDB()
-    {
-        data = new MainDB();
     }
 
     public void GameOver(string overType)
     {
         isGameOver = true;
 
-        GameObject temp = Instantiate(overObject, mainCanvas.position, Quaternion.identity);
-        temp.transform.SetParent(mainCanvas);
+        GameObject temp = Instantiate(overObject, GMCanvas.position, Quaternion.identity);
+        temp.transform.SetParent(GMCanvas);
         temp.transform.localScale = new Vector3(1, 1, 1);
         temp.GetComponent<GameOver>().overType.text = overType;
 
@@ -122,6 +114,32 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     public class MainDB
     {
+        public Rnak[] RankDB;
+    }
+    public void SavaData()
+    {
+        var save = JsonUtility.ToJson(data);
+        File.WriteAllText(filePath, save);
+    }   // Json 저장
+    public void LoadData()
+    {
+        if (!File.Exists(filePath)) { ResetMainDB(); return; }
 
+        var load = File.ReadAllText(filePath);
+        data = JsonUtility.FromJson<MainDB>(load);
+    }   // Json 로딩
+
+    void ResetMainDB()
+    {
+        data = new MainDB();
+
+        data.RankDB = new Rnak[8];
+    }
+
+    [System.Serializable]
+    public struct Rnak
+    {
+        public string name;
+        public uint score;
     }
 }
