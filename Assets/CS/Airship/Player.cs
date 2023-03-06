@@ -59,6 +59,8 @@ public class Player : Airship
         if (isRefuel) _oil = oilMinus * 10 * Time.deltaTime;
         else _oil = -oilMinus * Time.deltaTime;
 
+       GameManager.GM.runTime += Time.deltaTime;
+
         PlayerControl();
 
         GameOverCheck();

@@ -15,11 +15,16 @@ public class GameManager : MonoBehaviour
     public float setCargoHP;
     public float cargoHP;
 
-    [Header("점수")]
-    public uint score;   // 현재 게임 점수
+    [Header("게임결과창")]
+    public uint score;              // 현재 게임 점수
+    public float runTime;           // 게임 진행 시간
+    public uint desMeteo;           // 운석 파괴 
+    public uint desSmallAircraft;   // 소형기 파괴
+    public uint desMediumAircraft;  // 중형기 파괴
+    public uint desLargeAircraft;   // 소형기 파괴
 
     [Header("게임오버")]
-    public Transform mainCanvas;    // 게임오버가 들어갈 캔버스
+    Transform mainCanvas;    // 게임오버가 들어갈 캔버스
     public GameObject overObject;   // 게임오버를 알려줄 오브젝트
     
     [Header("게임 관리용 변수")]
@@ -33,6 +38,8 @@ public class GameManager : MonoBehaviour
     {
         GM = this;
         filePath = Application.persistentDataPath + "/MainDB.txt";
+
+        mainCanvas = GameObject.Find("MainCanvas").transform;
     }
 
     void Start()
@@ -72,6 +79,23 @@ public class GameManager : MonoBehaviour
         temp.transform.SetParent(mainCanvas);
         temp.transform.localScale = new Vector3(1, 1, 1);
         temp.GetComponent<GameOver>().overType.text = overType;
+
+        temp.GetComponent<GameOver>().resultText.text =
+            "Score : " +   CommaText(score) +
+            "\nrunTime : " + (int)runTime +
+            "\nMeteo : " + CommaText(desMeteo) +
+            "\nSmall : " + CommaText(desSmallAircraft) +
+            "\nMedium : "+ CommaText(desMediumAircraft) +
+            "\nLarge : " + CommaText(desLargeAircraft);
+    }
+    public void ResetGameData()
+    {
+        score = 0;
+        runTime = 0;
+        desMeteo = 0;
+        desSmallAircraft = 0;
+        desMediumAircraft = 0;
+        desLargeAircraft = 0;
     }
 
     public void BulletDestroy()
@@ -89,7 +113,11 @@ public class GameManager : MonoBehaviour
         yield return null;
     }   // 총알 제거 켜기
 
-    public string CommaText(uint Num) { return string.Format("{0:#,###}", Num); }
+    public string CommaText(uint Num) 
+    {
+        if (Num == 0) return "0";
+        return string.Format("{0:#,###}", Num); 
+    }
 
     [System.Serializable]
     public class MainDB
