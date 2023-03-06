@@ -36,10 +36,13 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        var objs = FindObjectsOfType<GameManager>();
+        if (objs.Length == 1) DontDestroyOnLoad(gameObject);
+        else Destroy(gameObject);
+
         GM = this;
         filePath = Application.persistentDataPath + "/MainDB.txt";
         Debug.Log(filePath);
-
         LoadData();
 
         GMCanvas = GameObject.Find("GMCanvas").transform;
@@ -53,7 +56,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // 기능확인용
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             Debug.Log("기능확인용 입력");
             SavaData();
@@ -96,14 +99,14 @@ public class GameManager : MonoBehaviour
 
         StopCoroutine("OnBullet");
         StartCoroutine(OnBullet());
-    }
+    }   // 총알 제거 켜기
     IEnumerator OnBullet()
     {
         yield return new WaitForSeconds(0.1f);
 
         isBulletDestroy = false;
         yield return null;
-    }   // 총알 제거 켜기
+    }   // 총알 제거 끄기
 
     public string CommaText(uint Num) 
     {
@@ -111,11 +114,13 @@ public class GameManager : MonoBehaviour
         return string.Format("{0:#,###}", Num); 
     }
 
+
     [System.Serializable]
     public class MainDB
     {
-        public Rnak[] RankDB;
+        public Rank[] RankDB;
     }
+
     public void SavaData()
     {
         var save = JsonUtility.ToJson(data);
@@ -133,13 +138,34 @@ public class GameManager : MonoBehaviour
     {
         data = new MainDB();
 
-        data.RankDB = new Rnak[8];
+        data.RankDB = new Rank[8];
+        for (int i = 0; i < data.RankDB.Length; i++)
+            data.RankDB[i].name = "Null";
+
+
     }
 
+
     [System.Serializable]
-    public struct Rnak
+    public struct Rank
     {
         public string name;
         public uint score;
+    }
+
+    public void LineUpRank(string name, uint score)
+    {
+        Rank inputRank = new Rank { name = name, score = score };
+
+        for (int i = 0; i < data.RankDB.Length; i++)
+        {
+            if (data.RankDB[i].score > inputRank.score) continue;
+            else
+            {
+                Rank temp = data.RankDB[i];
+                data.RankDB[i] = inputRank;
+                inputRank = temp;
+            }
+        }
     }
 }

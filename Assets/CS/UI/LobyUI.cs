@@ -17,17 +17,15 @@ public class LobyUI : MonoBehaviour
         {
             rank[i].name =  rankObj[i].transform.Find("nameText").GetComponent<TextMeshProUGUI>();
             rank[i].score = rankObj[i].transform.Find("scoreText").GetComponent<TextMeshProUGUI>();
-
-            if (GameManager.GM.data.RankDB[i].name == "") rank[i].name.text = "Null";
-            else  rank[i].name.text = GameManager.GM.data.RankDB[i].name;
-
-            rank[i].score.text = GameManager.GM.data.RankDB[i].score.ToString();
+            
+            rank[i].name.text = GameManager.GM.data.RankDB[i].name;
+            rank[i].score.text = GameManager.GM.CommaText(GameManager.GM.data.RankDB[i].score);
         }   // 랭크 텍스트 초기화 및 데이터 입력
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) popupRank();
+        if (Input.GetKeyDown(KeyCode.N)) popupRank();
     }
 
     public void popupRank()
