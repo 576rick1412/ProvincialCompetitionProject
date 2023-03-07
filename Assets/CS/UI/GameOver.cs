@@ -17,7 +17,7 @@ public class GameOver : MonoBehaviour
     void Awake()
     {
         playerName = playerNameInput.GetComponent<TMP_InputField>().text;
-        playerNameInput.onValueChanged.AddListener((word) => playerNameInput.text = Regex.Replace(word, @"[^0-9a-zA-Z°¡-ÆR]", ""));
+        //playerNameInput.onValueChanged.AddListener((word) => playerNameInput.text = Regex.Replace(word, @"[^0-9aA-Z°¡-ÆR]", ""));
     }
 
     void Start()
@@ -32,7 +32,7 @@ public class GameOver : MonoBehaviour
 
     public void InputName()
     {
-        playerName = playerNameInput.text;
+        playerName = playerNameInput.text.Trim();   // Trim() -> °ø¹é Á¦°Å
     }
 
     public void Back()

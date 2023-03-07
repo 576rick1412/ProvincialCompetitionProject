@@ -2918,7 +2918,7 @@ MonoBehaviour:
     isBulletCoolTime: 0
     nowAMMO: 0
     maxAMMO: 100
-    reloadTime: 2
+    reloadTime: 1.2
     reloadBar: 0
   attackReinforce: 0
 --- !u!61 &1159411373

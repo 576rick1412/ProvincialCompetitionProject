@@ -25,10 +25,15 @@ public class LobyUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.N)) SceneManager.LoadScene("inGameScene");
+
     }
 
-    public void popupRank()
+    public void MoveGameScene()
+    {
+        SceneManager.LoadScene("inGameScene");
+    }
+
+    public void popRank()
     {
         isRank = !isRank;
         rankUI.SetActive(isRank);
