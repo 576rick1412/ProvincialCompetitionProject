@@ -36,14 +36,38 @@ public class Player : Airship
     [Header("공격 설정")]
     public Attack attack;
 
+    // 강화와 관련된 변수, 프로퍼티들
+    public int _attackReinforce
+    {
+        get
+        {
+            return attackReinforce;
+        }
+
+        set 
+        {
+            // 공격강화가 4이라하면 강화
+            if(attackReinforce < 4)
+                attackReinforce += value; 
+        }
+    }
+    [HideInInspector]
+    public int attackReinforce;
+
+
     public override void Awake()
     {
+        GameManager.GM.ResetGameData();
+
         base.Awake();
 
         HP = setHP; oil = setOil;
 
         attack.isBulletCoolTime = true;
         attack.nowAMMO = attack.maxAMMO;
+
+        // 강화상태 초기화
+        attackReinforce = 1;
     }
 
     public override void Start()
@@ -64,6 +88,8 @@ public class Player : Airship
         PlayerControl();
 
         GameOverCheck();
+
+        if (Input.GetKeyDown(KeyCode.J)) _attackReinforce = 1;
     }
 
     void PlayerControl()
@@ -118,8 +144,36 @@ public class Player : Airship
 
         if (attack.nowAMMO > 0)
         {
-            var bullet = Instantiate(attack.bulletObject[0], transform.position, transform.rotation);
-            bullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * attack.bulletSpeed, ForceMode2D.Impulse);
+            switch (attackReinforce)
+            {
+                case 1: // 앞
+
+                    Fire_Mid();
+                    break;
+
+                case 2: // 옆
+
+                    Fire_Side();
+                    break;
+
+                case 3: // 옆, 대각
+
+                    Fire_Side();
+                    Fire_Diag();
+                    break;
+
+                case 4: // 앞, 옆, 대각
+
+                    Fire_Mid();
+                    Fire_Side();
+                    Fire_Diag();
+
+                    break;
+
+                default:
+                    break;
+            }
+
             attack.nowAMMO--;   // 탄창에서 1발 차감
 
             yield return new WaitForSeconds(attack.bulletCoolTime);
@@ -144,10 +198,37 @@ public class Player : Airship
         yield return null;
     }
 
+    void Fire_Mid()
+    {
+        GameObject bullet;
+
+        bullet = Instantiate(attack.bulletObject[0], transform.position, transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+    }   // 가운데 1줄
+
+    void Fire_Side()
+    {
+        GameObject bullet;
+
+        bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(-0.2f, 0f, 0f), transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+        bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(0.2f, 0f, 0f), transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+    }   // 가운데 옆 2줄
+
+    void Fire_Diag()
+    {
+        GameObject bullet;
+
+        bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(-0.2f, 0f, 0f), transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-0.15f, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+        bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(0.2f, 0f, 0f), transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0.15f, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+    }   // 대각선 2줄
+
     public override void Die()
     {
         //base.Die();
-        Debug.Log("연료 부족!! 게임오버");
     }
 
 

@@ -106,6 +106,7 @@ MonoBehaviour:
   point: 120
   anime: {fileID: 0}
   boomObject: {fileID: 5953652219184214976, guid: 06f0226abe00fb54c92cebdf3176ae0f, type: 3}
+  enemyType: small
 --- !u!61 &6537300477495963850
 BoxCollider2D:
   m_ObjectHideFlags: 0

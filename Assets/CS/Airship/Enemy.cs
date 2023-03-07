@@ -6,6 +6,9 @@ public class Enemy : Airship
 {
     GameObject HPbar;   // 체력바 오브젝트
     float tmpeHP;       // 체력바 띄우기용 임시 체력 저장
+
+    public string enemyType;
+
     public override void Awake()
     {
         base.Awake();
@@ -35,7 +38,7 @@ public class Enemy : Airship
         if (collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.GetComponent<Airship>()._HP = GameManager.GM.enemyDamage;
-            point = 0;  // 충돌로 인한 자폭은 포인트로 인정 X
+            point = 0;  // 충돌로 인한 자폭은 포인트로 인정 X , 자폭은 처치로 인정 x
             Die();
         }
     }

@@ -37,19 +37,15 @@ public class GameOver : MonoBehaviour
 
     public void Back()
     {
-        Rank_Reset();
-
-        SceneManager.LoadScene("MainScene");
+        Rank_Reset("MainScene");
     }
 
     public void Retry()
     {
-        Rank_Reset();
-
-        SceneManager.LoadScene("inGameScene"); 
+        Rank_Reset("inGameScene");
     }
     
-    void Rank_Reset()
+    void Rank_Reset(string sceneName)
     {
         if (playerName.Length > 0) // 입력하지 않았다면 기록 삭제
         {
@@ -57,8 +53,7 @@ public class GameOver : MonoBehaviour
             GameManager.GM.SavaData();
         }
 
-        GameManager.GM.ResetGameData();
-
+        SceneManager.LoadScene(sceneName);
         Destroy(gameObject);
     }   // 랭크 정렬 & 인게임 데이터 리셋
 }

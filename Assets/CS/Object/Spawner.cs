@@ -7,6 +7,11 @@ public class Spawner : MonoBehaviour
     public GameObject[] spawnObjects;
 
     public float spawnTime;
+
+    void Awake()
+    {
+
+    }
     void Start()
     {
         StartCoroutine(RandomSpawn());

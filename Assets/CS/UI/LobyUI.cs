@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 public class LobyUI : MonoBehaviour
 {
     public GameObject rankUI;
@@ -25,7 +25,7 @@ public class LobyUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.N)) popupRank();
+        if (Input.GetKeyDown(KeyCode.N)) SceneManager.LoadScene("inGameScene");
     }
 
     public void popupRank()

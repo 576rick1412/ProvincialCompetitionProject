@@ -18,10 +18,6 @@ public class GameManager : MonoBehaviour
     [Header("게임결과창")]
     public uint score;              // 현재 게임 점수
     public float runTime;           // 게임 진행 시간
-    public uint desMeteo;           // 운석 파괴 
-    public uint desSmallAircraft;   // 소형기 파괴
-    public uint desMediumAircraft;  // 중형기 파괴
-    public uint desLargeAircraft;   // 소형기 파괴
 
     [Header("게임오버")]
     Transform GMCanvas;             // 게임오버가 들어갈 캔버스
@@ -46,11 +42,13 @@ public class GameManager : MonoBehaviour
         LoadData();
 
         GMCanvas = GameObject.Find("GMCanvas").transform;
+
+        cargoHP = setCargoHP;
     }
 
     void Start()
     {
-        cargoHP = setCargoHP;
+        
     }
 
     void Update()
@@ -76,21 +74,17 @@ public class GameManager : MonoBehaviour
         temp.GetComponent<GameOver>().overType.text = overType;
 
         temp.GetComponent<GameOver>().resultText.text =
-            "Score : " +   CommaText(score) +
-            "\nrunTime : " + (int)runTime +
-            "\nMeteo : " + CommaText(desMeteo) +
-            "\nSmall : " + CommaText(desSmallAircraft) +
-            "\nMedium : "+ CommaText(desMediumAircraft) +
-            "\nLarge : " + CommaText(desLargeAircraft);
+            "Score : " + CommaText(score) +
+            "\nrunTime : " + (int)runTime;
     }
     public void ResetGameData()
     {
+        isGameOver = false;
+
+        cargoHP = setCargoHP;
+
         score = 0;
         runTime = 0;
-        desMeteo = 0;
-        desSmallAircraft = 0;
-        desMediumAircraft = 0;
-        desLargeAircraft = 0;
     }
 
     public void BulletDestroy()
