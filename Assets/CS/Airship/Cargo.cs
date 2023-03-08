@@ -32,13 +32,9 @@ public class Cargo : Airship
         base.Awake();
     }
 
-    public override void Start()
+    public override void Die()
     {
-        
-    }
-
-    public override void Update()
-    {
-        
+        GameManager.GM.GameOver("Cargo Destroy\nmission failed");
+        Destroy(gameObject);
     }
 }

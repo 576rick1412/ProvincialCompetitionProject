@@ -101,12 +101,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830673d29297f144aa85263d6d7ac9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1
+  HP: 50
   speed: 3
   point: 120
   anime: {fileID: 0}
   boomObject: {fileID: 5953652219184214976, guid: 06f0226abe00fb54c92cebdf3176ae0f, type: 3}
   enemyType: small
+  isAttack: 0
+  bulletObject: {fileID: 6017217206553587060, guid: 2bc42d42c677ba1448d7731af624e5dc, type: 3}
+  attackTime: 2
 --- !u!61 &6537300477495963850
 BoxCollider2D:
   m_ObjectHideFlags: 0

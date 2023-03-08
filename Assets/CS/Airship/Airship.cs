@@ -60,6 +60,14 @@ public class Airship : MonoBehaviour
     {
         GameManager.GM.score += point;
 
+        if(gameObject.CompareTag("Enemy"))
+        {
+            int x = Random.Range(0, 10);
+            if (x == 0) Instantiate(GameManager.GM.items[Random.Range(0, GameManager.GM.items.Length)], 
+                transform.position, transform.rotation);
+            
+        }   // 죽은 것이 적일 시 아이템 드랍
+
         Instantiate(boomObject, transform.position, transform.rotation);
         Destroy(gameObject);
     }   // 파괴 시 실행

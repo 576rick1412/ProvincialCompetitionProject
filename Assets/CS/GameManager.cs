@@ -22,10 +22,31 @@ public class GameManager : MonoBehaviour
     [Header("게임오버")]
     Transform GMCanvas;             // 게임오버가 들어갈 캔버스
     public GameObject overObject;   // 게임오버를 알려줄 오브젝트
-    
+
     [Header("게임 관리용 변수")]
+    public GameObject invincObj;    // 무적 UI
+    public bool isInvincibility;    // 무적효과
+    IEnumerator invinrator;         // 무적 코루틴 넣을곳
+    public bool _isInvincibility
+    {
+        get
+        {
+            return isInvincibility;
+        }
+
+        set
+        {   
+            StopCoroutine (invinrator);
+            invinrator = InvincibilityControl();
+            StartCoroutine(invinrator);
+        }
+    }   // 무적효과 관리 프로퍼티
+
     public bool isGameOver;         // 참일 시 게임 멈춤
     public bool isBulletDestroy;    // 모든 총알 제거
+
+    [Header("아이템 리스트")]
+    public GameObject[] items;
 
     string filePath;    // 저장 경로
     public MainDB data;
@@ -42,8 +63,12 @@ public class GameManager : MonoBehaviour
         LoadData();
 
         GMCanvas = GameObject.Find("GMCanvas").transform;
+        invinrator = InvincibilityControl();
 
         cargoHP = setCargoHP;
+
+        palyerDamage = 15;
+        enemyDamage = 10;
     }
 
     void Start()
@@ -59,9 +84,6 @@ public class GameManager : MonoBehaviour
             Debug.Log("기능확인용 입력");
             SavaData();
         }
-
-        // 수송선 체력 없을 시 게임오버
-        if (cargoHP <= 0) GameOver("Cargo Destroy\nmission failed");
     }
 
     public void GameOver(string overType)
@@ -85,6 +107,9 @@ public class GameManager : MonoBehaviour
 
         score = 0;
         runTime = 0;
+
+        palyerDamage = 15;
+        enemyDamage = 10;
     }
 
     public void BulletDestroy()
@@ -135,8 +160,6 @@ public class GameManager : MonoBehaviour
         data.RankDB = new Rank[8];
         for (int i = 0; i < data.RankDB.Length; i++)
             data.RankDB[i].name = "Null";
-
-
     }
 
 
@@ -161,5 +184,16 @@ public class GameManager : MonoBehaviour
                 inputRank = temp;
             }
         }
+    }
+
+    IEnumerator InvincibilityControl()
+    {
+        isInvincibility = true;
+        invincObj.SetActive(true);
+
+        yield return new WaitForSeconds(5f);
+
+        isInvincibility = false;
+        invincObj.SetActive(false);
     }
 }

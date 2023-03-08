@@ -9,6 +9,11 @@ public class Enemy : Airship
 
     public string enemyType;
 
+    [Header("공격 설정")]
+    public bool isAttack;               // 공격 여부
+    public GameObject bulletObject;     // 총알 오브젝트
+    public float attackTime;            // 공격 간격
+
     public override void Awake()
     {
         base.Awake();
@@ -20,6 +25,8 @@ public class Enemy : Airship
     public override void Start()
     {
         tmpeHP = HP;
+
+        if(isAttack) StartCoroutine(Fire());
     }
 
     public override void Update()
@@ -37,9 +44,35 @@ public class Enemy : Airship
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            if(!GameManager.GM.isInvincibility)
+                collision.gameObject.GetComponent<Airship>()._HP = GameManager.GM.enemyDamage;
+            point = 0;  // 충돌로 인한 자폭은 포인트로 인정 X , 자폭은 처치로 인정 x
+            Die();
+        }
+
+        if(collision.gameObject.CompareTag("Cargo"))
+        {
             collision.gameObject.GetComponent<Airship>()._HP = GameManager.GM.enemyDamage;
             point = 0;  // 충돌로 인한 자폭은 포인트로 인정 X , 자폭은 처치로 인정 x
             Die();
         }
     }
+
+    IEnumerator Fire()
+    {
+        // 게임오버가 거짓일 때만 동작
+        while (!GameManager.GM.isGameOver)
+        {
+            Fire_Mid();
+            yield return new WaitForSeconds(attackTime);
+        }
+    }
+
+    void Fire_Mid()
+    {
+        GameObject bullet;
+
+        bullet = Instantiate(bulletObject, transform.position, transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -1) * 10, ForceMode2D.Impulse);
+    }   // 가운데 1줄
 }

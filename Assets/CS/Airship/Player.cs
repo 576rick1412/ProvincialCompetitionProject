@@ -48,7 +48,12 @@ public class Player : Airship
         {
             // 공격강화가 4이라하면 강화
             if(attackReinforce < 4)
-                attackReinforce += value; 
+            {
+                attackReinforce += value;
+                GameManager.GM.palyerDamage += 30;
+                attack.maxAMMO += 20;
+            }
+                
         }
     }
     [HideInInspector]
