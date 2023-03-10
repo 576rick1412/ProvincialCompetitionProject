@@ -94,7 +94,7 @@ public class Player : Airship
 
         GameOverCheck();
 
-        if (Input.GetKeyDown(KeyCode.J)) _attackReinforce = 1;
+        if (Input.GetKeyDown(KeyCode.J)) GameManager.GM.cargo.GetComponent<Cargo>().SpawnBeam();
     }
 
     void PlayerControl()

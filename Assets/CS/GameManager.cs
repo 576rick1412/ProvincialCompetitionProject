@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     public int palyerDamage;
     public int enemyDamage;
 
-    [Header("카고 체력")]
+    [Header("카고")]
+    public GameObject cargo;
+    public float cargoBeamDamage;
     public float setCargoHP;
     public float cargoHP;
 

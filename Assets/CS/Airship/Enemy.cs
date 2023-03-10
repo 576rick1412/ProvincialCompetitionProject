@@ -46,8 +46,10 @@ public class Enemy : Airship
         {
             if(!GameManager.GM.isInvincibility)
                 collision.gameObject.GetComponent<Airship>()._HP = GameManager.GM.enemyDamage;
-            point = 0;  // 충돌로 인한 자폭은 포인트로 인정 X , 자폭은 처치로 인정 x
+
             Die();
+
+            return;
         }
 
         if(collision.gameObject.CompareTag("Cargo"))
@@ -55,6 +57,14 @@ public class Enemy : Airship
             collision.gameObject.GetComponent<Airship>()._HP = GameManager.GM.enemyDamage;
             point = 0;  // 충돌로 인한 자폭은 포인트로 인정 X , 자폭은 처치로 인정 x
             Die();
+
+            return;
+        }
+
+        if (collision.gameObject.CompareTag("Beam"))
+        {
+            _HP = GameManager.GM.cargoBeamDamage;
+            return;
         }
     }
 

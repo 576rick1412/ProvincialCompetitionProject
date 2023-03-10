@@ -300,6 +300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   palyerDamage: 15
   enemyDamage: 10
+  cargo: {fileID: 0}
+  cargoBeamDamage: 300
   setCargoHP: 1000
   cargoHP: 0
   score: 0

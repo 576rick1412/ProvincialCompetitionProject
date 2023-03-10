@@ -8,6 +8,7 @@ TagManager:
   - Border
   - Refuel
   - Cargo
+  - Beam
   layers:
   - Default
   - TransparentFX
