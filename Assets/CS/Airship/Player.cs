@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Player : Airship
 {
-    [HideInInspector]
     public float setHP;             // HP 최대치 저장
-    [HideInInspector]
+    public float healHPValue;       // 체력회복스킬 힐량
     public float setOil;            // 연료 최대치 저장
 
     public float _oil
@@ -29,6 +28,18 @@ public class Player : Airship
     public float oil;               // 연료
     float oilMinus = 1f;            // 연료 연소 속도
     bool isRefuel = false;          // 공중급유
+
+    [Header("체력회복 스킬")]
+
+    
+    public float greenBarTimes; // 힐 사용중 진행도
+    
+    public float whiteBar;      // 힐 쿨타임
+
+    public float setGreenTimes; // 힐 사용중 진행도 저장
+    public float setWhiteBar;   // 힐 쿨타임 저장
+
+    bool isHeal;                // 힐하는중
 
     [Header("보더 제한")]
     public Vector2 moveRestri;      // 이동제한
@@ -67,9 +78,10 @@ public class Player : Airship
         base.Awake();
 
         HP = setHP; oil = setOil;
+        attack.nowAMMO = attack.maxAMMO;
 
         attack.isBulletCoolTime = true;
-        attack.nowAMMO = attack.maxAMMO;
+        isHeal = true;
 
         // 강화상태 초기화
         attackReinforce = 1;
@@ -106,6 +118,11 @@ public class Player : Airship
 
             BordarCheck(nextPos);   // 이동도 들어있음
         }   // 이동 입력
+
+        if (Input.GetKey(KeyCode.Q) && isHeal && HP + healHPValue < setHP)
+        {
+            StartCoroutine(Heal());
+        }
 
         if(Input.GetKey(KeyCode.R) && attack.isBulletCoolTime)
         {
@@ -195,8 +212,7 @@ public class Player : Airship
             }
 
             attack.nowAMMO = attack.maxAMMO;
-            // 재장전
-        }
+        }   // 재장전
 
         attack.isBulletCoolTime = true;
 
@@ -231,11 +247,34 @@ public class Player : Airship
         bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0.15f, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
     }   // 대각선 2줄
 
+    IEnumerator Heal()
+    {
+        isHeal = false;
+
+        greenBarTimes = setGreenTimes;
+        for (int i = 0; i < setGreenTimes; i++)
+        {
+            greenBarTimes -= 1;
+            HP += healHPValue / setGreenTimes;
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        float times = 50;
+        whiteBar = setWhiteBar;
+        for (int i = 0; i < setWhiteBar * times; i++)
+        {
+            whiteBar -= 1f / times;
+            yield return new WaitForSeconds(1f / times);
+        }
+
+        isHeal = true;
+        yield return null;
+    }
+
     public override void Die()
     {
         //base.Die();
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

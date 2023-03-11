@@ -54,5 +54,9 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Border"))
             Destroy(gameObject);
+
+        if(collision.gameObject.CompareTag("Beam") && !isPlayer)
+            Destroy(gameObject);
+
     }
 }

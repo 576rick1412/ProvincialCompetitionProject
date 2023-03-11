@@ -10,23 +10,31 @@ public class IngameUI : MonoBehaviour
 
     [Header("체력,연료,카고 바")]
     public Image HPBar;
+    public Image HPBarPlus;
     public Image oilBar;
     public Image cargoBar;
+
+    float maxHealValue;
 
     [Header("장전 정보")]
     public TextMeshProUGUI ammoText;
     public Image reloadBar;
+
+    [Header("회복스킬 정보")]
+    public Image plusGreenBar;
+    public Image plusWhiteBar;
 
     [Header("게임 스코어")]
     public TextMeshProUGUI scoreText;
     void Awake()
     {
         player = GameObject.Find("Player");
+        maxHealValue = player.GetComponent<Player>().healHPValue;
     }
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -47,5 +55,9 @@ public class IngameUI : MonoBehaviour
 
         scoreText.text = "Score\n";
         scoreText.text += GameManager.GM.score == 0? "0" : GameManager.GM.CommaText(GameManager.GM.score);
+
+        HPBarPlus.fillAmount = (player.GetComponent<Player>()._HP + maxHealValue) / player.GetComponent<Player>().setHP;
+        plusGreenBar.fillAmount = player.GetComponent<Player>().greenBarTimes / player.GetComponent<Player>().setGreenTimes;
+        plusWhiteBar.fillAmount = player.GetComponent<Player>().whiteBar / player.GetComponent<Player>().setWhiteBar;
     }
 }
