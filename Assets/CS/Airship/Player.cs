@@ -233,6 +233,7 @@ public class Player : Airship
 
         bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(-0.2f, 0f, 0f), transform.rotation);
         bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+
         bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(0.2f, 0f, 0f), transform.rotation);
         bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
     }   // 가운데 옆 2줄
@@ -243,6 +244,7 @@ public class Player : Airship
 
         bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(-0.2f, 0f, 0f), transform.rotation);
         bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-0.15f, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
+
         bullet = Instantiate(attack.bulletObject[0], transform.position + new Vector3(0.2f, 0f, 0f), transform.rotation);
         bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0.15f, 1) * attack.bulletSpeed, ForceMode2D.Impulse);
     }   // 대각선 2줄

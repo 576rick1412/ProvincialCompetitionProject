@@ -7,13 +7,17 @@ public class Enemy : Airship
     GameObject HPbar;   // 체력바 오브젝트
     float tmpeHP;       // 체력바 띄우기용 임시 체력 저장
 
-    public string enemyType;
-
     [Header("공격 설정")]
     public bool isAttack;               // 공격 여부
+    public bool isDoubleAttack;         // 더블 공격 여부
     public GameObject bulletObject;     // 총알 오브젝트
     public float attackTime;            // 공격 간격
+    public float bulletSpeed;           // 총알 속도
 
+    [HideInInspector]
+    public float moveX;
+    [HideInInspector]
+    public float moveY;
     public override void Awake()
     {
         base.Awake();
@@ -26,7 +30,11 @@ public class Enemy : Airship
     {
         tmpeHP = HP;
 
-        if(isAttack) StartCoroutine(Fire());
+        if (isAttack)
+        {
+            if (isDoubleAttack) StartCoroutine(Fire_D());
+            else StartCoroutine(Fire_M());
+        }
     }
 
     public override void Update()
@@ -37,7 +45,8 @@ public class Enemy : Airship
         if (HP != tmpeHP) HPbar.SetActive(true);
         else tmpeHP = HP;
 
-        Move(new Vector2(0f, -1f));
+        Move(new Vector2(moveX, moveY));
+        //Move(new Vector2(0f, -1f));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,12 +77,21 @@ public class Enemy : Airship
         }
     }
 
-    IEnumerator Fire()
+    IEnumerator Fire_M()
     {
         // 게임오버가 거짓일 때만 동작
         while (!GameManager.GM.isGameOver)
         {
             Fire_Mid();
+            yield return new WaitForSeconds(attackTime);
+        }
+    }
+    IEnumerator Fire_D()
+    {
+        // 게임오버가 거짓일 때만 동작
+        while (!GameManager.GM.isGameOver)
+        {
+            Fire_Side();
             yield return new WaitForSeconds(attackTime);
         }
     }
@@ -85,4 +103,15 @@ public class Enemy : Airship
         bullet = Instantiate(bulletObject, transform.position, transform.rotation);
         bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -1) * 10, ForceMode2D.Impulse);
     }   // 가운데 1줄
+
+    void Fire_Side()
+    {
+        GameObject bullet;
+
+        bullet = Instantiate(bulletObject, transform.position + new Vector3(-0.2f, 0f, 0f), transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * bulletSpeed, ForceMode2D.Impulse);
+
+        bullet = Instantiate(bulletObject, transform.position + new Vector3(0.2f, 0f, 0f), transform.rotation);
+        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 1) * bulletSpeed, ForceMode2D.Impulse);
+    }   // 가운데 옆 2줄
 }

@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public GameObject overObject;   // 게임오버를 알려줄 오브젝트
 
     [Header("게임 관리용 변수")]
+    public int gameLevel;           // 현재 게임 레벨
     public GameObject invincObj;    // 무적 UI
     public bool isInvincibility;    // 무적효과
     IEnumerator invinrator;         // 무적 코루틴 넣을곳
@@ -112,6 +113,8 @@ public class GameManager : MonoBehaviour
 
         palyerDamage = 15;
         enemyDamage = 10;
+
+        gameLevel = 1;
     }
 
     public void BulletDestroy()
